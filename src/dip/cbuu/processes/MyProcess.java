@@ -11,6 +11,7 @@ public class MyProcess {
     public HistogramProcess histogramProcess = null;
     public PatchExtraction patchExtraction = null;
     public SpatialFiltering spatialFiltering = null;
+    public FourierProcess fourierProcess = null;
 
 	public static MyProcess getInstance() {
 		if (instance==null) {
@@ -27,6 +28,7 @@ public class MyProcess {
 //    	qp = new QuantizationProcess();
 //    	sp = new ScalingProcess();
 //    	gp = new GradientProcess();
+		fourierProcess = new FourierProcess();
     	histogramProcess = new HistogramProcess();
     	patchExtraction = new PatchExtraction();
     	spatialFiltering = new SpatialFiltering();

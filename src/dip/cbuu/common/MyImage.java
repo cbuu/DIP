@@ -20,7 +20,7 @@ public class MyImage {
 	public static int[][] getData(BufferedImage bufferedImage) {
 		int width = bufferedImage.getWidth();
 		int height = bufferedImage.getHeight();
-		
+
 		int[][] data = new int[width][height];
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {

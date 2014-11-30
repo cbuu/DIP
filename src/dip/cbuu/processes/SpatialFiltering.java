@@ -17,7 +17,7 @@ public class SpatialFiltering {
 		int width = bufferedImage.getWidth();
 		int height = bufferedImage.getHeight();
 		int[][] old = MyImage.getData(bufferedImage);
-		float[][] mask = filter.getMask();
+		double[][] mask = filter.getMask();
 		int size = filter.getSize();
 		int d = size / 2;
 
@@ -39,11 +39,11 @@ public class SpatialFiltering {
 						pixel += val * mask[k - i + d][l - j + d];
 					}
 				}
-				if(filter instanceof SharpenFilter){
-					if (((SharpenFilter) filter).isOverlying()) {
-						pixel+=old[j][i];	
-					}
-				}
+//				if(filter instanceof SharpenFilter){
+//					if (((SharpenFilter) filter).isOverlying()) {
+//						pixel+=old[j][i];	
+//					}
+//				}
 				int p = (int) pixel;
 				
 				p = p > 255 ? 255 : p;

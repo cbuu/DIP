@@ -10,6 +10,7 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
 
+import dip.cbuu.common.Complex;
 import dip.cbuu.common.MyImage;
 
 public class FileProcess {
@@ -17,6 +18,8 @@ public class FileProcess {
 	private static FileProcess instance = null;
 	
 	private MyImage image = null;
+	
+	private Complex[][] fourierComplexs = null;
 	
 	public static FileProcess getInstance() {
 		if (instance==null) {
@@ -76,6 +79,20 @@ public class FileProcess {
 	public MyImage getImage() {
 		return image;
 	}
+	
+	public void setImage(MyImage image) {
+		this.image = image;
+	}
+
+	public Complex[][] getFourierComplexs() {
+		return fourierComplexs;
+	}
+
+	public void setFourierComplexs(Complex[][] fourierComplexs) {
+		this.fourierComplexs = fourierComplexs;
+	}
+
+
 	
 	
 }

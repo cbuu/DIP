@@ -2,7 +2,7 @@ package dip.cbuu.common;
 
 public class MyFilter {
 
-	protected float[][] mask;
+	protected double[][] mask;
 	protected int size;
 	
 	public MyFilter() {
@@ -11,11 +11,11 @@ public class MyFilter {
 	
 	public MyFilter(int size) {
 		// TODO Auto-generated constructor stub
-		mask = new float[size][size];
+		mask = new double[size][size];
 		this.size = size;
 	}
 	
-	public float[][] getMask() {
+	public double[][] getMask() {
 		return mask;
 	}
 	

@@ -13,12 +13,15 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import dip.cbuu.common.Complex;
+import dip.cbuu.common.MyFilter;
 import dip.cbuu.common.MyFrame;
 import dip.cbuu.common.MyImage;
 import dip.cbuu.filters.SharpenFilter;
 import dip.cbuu.filters.SmoothFilter;
 import dip.cbuu.filters.SobelFilter;
 import dip.cbuu.processes.FileProcess;
+import dip.cbuu.processes.FourierProcess;
 import dip.cbuu.processes.HistogramProcess;
 import dip.cbuu.processes.MyProcess;
 
@@ -46,6 +49,12 @@ public class MainFrame extends MyFrame{
     					private JMenuItem sharpenItem;
     					private JMenuItem sobelXItem;
     					private JMenuItem sobelYItem;
+    			private JMenu fourierMenu;
+    					private JMenuItem fourierItem;
+    					private JMenuItem inverseFourierItem;
+    					private JMenuItem spectrumItem;
+    					private JMenuItem freq_11_filterItem;
+    					private JMenuItem freq_laplacianItem;
 		
 	public MainFrame() {
 		super();
@@ -63,6 +72,9 @@ public class MainFrame extends MyFrame{
         
         processMenu = new JMenu("Process");
         menubar.add(processMenu);
+        
+        fourierMenu = new JMenu("Fourier");
+        menubar.add(fourierMenu);
         
         openItem = new JMenuItem("Open");
         openItem.addActionListener(this);
@@ -116,6 +128,26 @@ public class MainFrame extends MyFrame{
         sobelYItem = new JMenuItem("Sobel-Y");
         sobelYItem.addActionListener(this);
         processMenu.add(sobelYItem);
+        
+        fourierItem = new JMenuItem("Fourier");
+        fourierItem.addActionListener(this);
+        fourierMenu.add(fourierItem);
+        
+        inverseFourierItem = new JMenuItem("InverseFourier");
+        inverseFourierItem.addActionListener(this);
+        fourierMenu.add(inverseFourierItem);
+        
+        spectrumItem = new JMenuItem("Spectum");
+        spectrumItem.addActionListener(this);
+        fourierMenu.add(spectrumItem);
+        
+        freq_11_filterItem = new JMenuItem("AvgFilter_11");
+        freq_11_filterItem.addActionListener(this);
+        fourierMenu.add(freq_11_filterItem);
+        
+        freq_laplacianItem = new JMenuItem("Laplacian");
+        freq_laplacianItem.addActionListener(this);
+        fourierMenu.add(freq_laplacianItem);
 	}
 	
 	@Override
@@ -165,6 +197,63 @@ public class MainFrame extends MyFrame{
 			MyImage myImage = FileProcess.getInstance().getImage();
 			myImage.update(MyProcess.getInstance().spatialFiltering.filter2d(myImage.getBufferedImage(), new SobelFilter(SobelFilter.Y)));
 			showImage(myImage.getBufferedImage());
+		}else if (item==fourierItem) {
+			MyImage myImage = FileProcess.getInstance().getImage();
+			int x = myImage.getWidth();
+			int y = myImage.getHeight();
+			Complex[][] complexs = FourierProcess.getComplexArray(myImage.getBufferedImage());
+			Complex[][] fourierData = MyProcess.getInstance().fourierProcess.dft2(complexs, false);
+			FileProcess.getInstance().setFourierComplexs(fourierData);
+		} else if (item==inverseFourierItem) {
+			MyImage myImage = FileProcess.getInstance().getImage();
+			int x = myImage.getWidth();
+			int y = myImage.getHeight();
+			Complex[][] complexs = FileProcess.getInstance().getFourierComplexs();
+			Complex[][] fourierData = MyProcess.getInstance().fourierProcess.dft2(complexs, true);
+			BufferedImage orgImage = MyProcess.getInstance().fourierProcess.getSimilarOrgImage(fourierData, x, y);
+			myImage.update(orgImage);
+			showImage(myImage.getBufferedImage());
+			FileProcess.getInstance().setImage(myImage);
+			FileProcess.getInstance().setFourierComplexs(fourierData);
+		}else if (item == spectrumItem) {
+			MyImage myImage = FileProcess.getInstance().getImage();
+			int x = myImage.getWidth();
+			int y = myImage.getHeight();
+			Complex[][] complexs = FileProcess.getInstance().getFourierComplexs();
+			BufferedImage spectrumImage = MyProcess.getInstance().fourierProcess.getSpectrum(complexs, x, y);
+			myImage.update(spectrumImage);
+			showImage(myImage.getBufferedImage());
+			FileProcess.getInstance().setImage(myImage);
+		}else if (item==freq_11_filterItem) {
+			MyImage myImage = FileProcess.getInstance().getImage();
+			int x = myImage.getWidth();
+			int y = myImage.getHeight();
+			Complex[][] complexs = FourierProcess.getComplexArray(myImage.getBufferedImage());
+			Complex[][] fourierData = MyProcess.getInstance().fourierProcess.dft2(complexs, false);
+			MyFilter filter = new SmoothFilter(11);
+			Complex[][] freq_filter = MyProcess.getInstance().fourierProcess.getFilter(filter, x, y);
+			Complex[][] newComplexs = MyProcess.getInstance().fourierProcess.dot(fourierData, freq_filter, x, y);
+			newComplexs = MyProcess.getInstance().fourierProcess.dft2(newComplexs, true);
+			BufferedImage orgImage = MyProcess.getInstance().fourierProcess.getSimilarOrgImage(newComplexs, x, y);
+			myImage.update(orgImage);
+			showImage(myImage.getBufferedImage());
+			FileProcess.getInstance().setImage(myImage);
+			FileProcess.getInstance().setFourierComplexs(newComplexs);
+		}else if (item==freq_laplacianItem) {
+			MyImage myImage = FileProcess.getInstance().getImage();
+			int x = myImage.getWidth();
+			int y = myImage.getHeight();
+			Complex[][] complexs = FourierProcess.getComplexArray(myImage.getBufferedImage());
+			Complex[][] fourierData = MyProcess.getInstance().fourierProcess.dft2(complexs, false);
+			MyFilter filter = new SharpenFilter(false);
+			Complex[][] freq_filter = MyProcess.getInstance().fourierProcess.getFilter(filter, x, y);
+			Complex[][] newComplexs = MyProcess.getInstance().fourierProcess.dot(fourierData, freq_filter, x, y);
+			newComplexs = MyProcess.getInstance().fourierProcess.dft2(newComplexs, true);
+			BufferedImage orgImage = MyProcess.getInstance().fourierProcess.getSimilarOrgImage(newComplexs, x, y);
+			myImage.update(orgImage);
+			showImage(myImage.getBufferedImage());
+			FileProcess.getInstance().setImage(myImage);
+			FileProcess.getInstance().setFourierComplexs(newComplexs);
 		}
 		
 	}
