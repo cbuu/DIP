@@ -36,7 +36,7 @@ public class MyFrame extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 	}
 	
-	protected void showImage(BufferedImage bufferedImage){
+	public void showImage(BufferedImage bufferedImage){
 		if(bufferedImage!=null){
 			if(container!=null){
 				remove(container);

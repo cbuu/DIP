@@ -17,6 +17,8 @@ public class FileProcess {
 	
 	private static FileProcess instance = null;
 	
+	private MyImage orgImage = null;
+	
 	private MyImage image = null;
 	
 	private Complex[][] fourierComplexs = null;
@@ -48,6 +50,7 @@ public class FileProcess {
     		try {
     			bufferedImage = ImageIO.read(new File(path));
     			image =  new MyImage(bufferedImage);
+    			orgImage = new MyImage(bufferedImage);
     		} catch (IOException e) {
     			// TODO Auto-generated catch block
     			e.printStackTrace();
@@ -90,6 +93,14 @@ public class FileProcess {
 
 	public void setFourierComplexs(Complex[][] fourierComplexs) {
 		this.fourierComplexs = fourierComplexs;
+	}
+
+	public MyImage getOrgImage() {
+		return orgImage;
+	}
+
+	public void setOrgImage(MyImage orgImage) {
+		this.orgImage = orgImage;
 	}
 
 

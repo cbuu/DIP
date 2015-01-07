@@ -16,4 +16,8 @@ public class Complex {
 	public double abs(){
 		return Math.sqrt(r*r+i*i);
 	}
+	
+	public Complex conjugate(){
+		return new Complex(r, -i);
+	}
 }
