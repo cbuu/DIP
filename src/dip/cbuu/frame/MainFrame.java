@@ -75,6 +75,7 @@ public class MainFrame extends MyFrame{
     			private JMenu dehazeMenu;
     					private JMenuItem getDarkChannelItem;
     					private JMenuItem dehazeItem;
+    					private JMenuItem betterDehazeItem;
 		
 	public MainFrame() {
 		super();
@@ -243,6 +244,11 @@ public class MainFrame extends MyFrame{
         dehazeItem.addActionListener(this);
         dehazeMenu.add(dehazeItem);
         register(dehazeItem, Constant.DEHAZE);
+        
+        betterDehazeItem = new JMenuItem("BetterDehaze");
+        betterDehazeItem.addActionListener(this);
+        dehazeMenu.add(betterDehazeItem);
+        register(betterDehazeItem, Constant.BETTER_DEHAZE);
         
 	}
 	

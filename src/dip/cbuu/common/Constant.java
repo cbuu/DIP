@@ -22,4 +22,5 @@ public enum Constant{
 	RGB_EQUALIZE,
 	GET_DARKCHANNEL,
 	DEHAZE,
+	BETTER_DEHAZE,
 }

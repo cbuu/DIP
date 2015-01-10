@@ -8,6 +8,7 @@ import dip.cbuu.common.MyFrame;
 import dip.cbuu.handler.AddGaussianNoiseHandler;
 import dip.cbuu.handler.AddImpluseHandler;
 import dip.cbuu.handler.ArithmaticMeanHandler;
+import dip.cbuu.handler.BetterDehazeHandler;
 import dip.cbuu.handler.ContraHarmonicMeanHandler;
 import dip.cbuu.handler.DarkChannelHandler;
 import dip.cbuu.handler.DehazeHandler;
@@ -80,6 +81,9 @@ public class HandlerFactory {
 			break;
 		case DEHAZE:
 			handler = new DehazeHandler(frame);
+			break;
+		case BETTER_DEHAZE:
+			handler = new BetterDehazeHandler(frame);
 			break;
 		default:
 			break;

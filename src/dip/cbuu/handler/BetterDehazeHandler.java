@@ -5,15 +5,15 @@ import java.awt.image.BufferedImage;
 import dip.cbuu.common.IHandler;
 import dip.cbuu.common.MyFrame;
 import dip.cbuu.common.MyImage;
+import dip.cbuu.processes.BetterDehazeProcess;
 import dip.cbuu.processes.FileProcess;
 import dip.cbuu.processes.GetDarkChannelProcess;
-import dip.cbuu.processes.MinProcess;
-import dip.cbuu.util.DebugLog;
 
-public class DarkChannelHandler extends IHandler{
+public class BetterDehazeHandler extends IHandler{
 
-	public DarkChannelHandler(MyFrame frame) {
+	public BetterDehazeHandler(MyFrame frame) {
 		super(frame);
+		// TODO Auto-generated constructor stub
 	}
 
 	@Override
@@ -21,7 +21,7 @@ public class DarkChannelHandler extends IHandler{
 		MyImage myImage = FileProcess.getInstance().getImage();
 		BufferedImage bufferedImage = myImage.getBufferedImage();
 		
-		bufferedImage = GetDarkChannelProcess.process(bufferedImage);
+		bufferedImage = BetterDehazeProcess.process(bufferedImage);
 		
 		
 		myImage.update(bufferedImage);

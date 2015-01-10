@@ -47,16 +47,6 @@ public class DehazeProcess {
 				Ab = b;
 			}
 		}
-		
-		if (Ar > 220)
-            Ar = 220;
-        if (Ag > 220)
-            Ag = 220;
-        if (Ab > 220)
-            Ab = 220;
-		
-
-		double[] ts = new double[length];
 
 		for (int i = 0; i < height; i++) {
 			for (int j = 0; j < width; j++) {
@@ -113,7 +103,6 @@ public class DehazeProcess {
                 
                 data[i * width + j] = 0xff000000 | ((int)(r) << 16) | ((int)(g) << 8)
 						| (int)(b);
-                
 			}
 		}
 		
@@ -137,6 +126,5 @@ public class DehazeProcess {
 		public int compare(Pixel o1, Pixel o2) {
 			return o2.gray - o1.gray;
 		}
-
 	}
 }
