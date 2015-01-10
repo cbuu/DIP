@@ -9,17 +9,25 @@ import dip.cbuu.util.DebugLog;
 public class DehazeProcess {
 	private static int width = 0;
 	private static int height = 0;
+	
+	private static final int DEFAULT_SIZE = 11;
+	private static final int MAX_A = 180;
 
 	public static BufferedImage process(BufferedImage darkChannelImage) {
 		width = darkChannelImage.getWidth();
 		height = darkChannelImage.getHeight();
 		int length = width * height;
+		
 		int select = (int) (length * 0.001);
-		int d = 7;
+		
+		int d = DEFAULT_SIZE/2;
+		
 		int[] data = new int[length];
 		Pixel[] pixels = new Pixel[length];
+		
 		int Ar = 0, Ag = 0, Ab = 0;
 
+		//为每个像素记录灰度值和位置
 		for (int i = 0; i < width; i++) {
 			for (int j = 0; j < height; j++) {
 				Pixel p = new Pixel();
@@ -29,28 +37,46 @@ public class DehazeProcess {
 				pixels[i * height + j] = p;
 			}
 		}
+		
+		
 		int max = 0;
+		
+		//降序排序
 		Arrays.sort(pixels, new pixelComparator());
+		
 		BufferedImage orgImage = FileProcess.getInstance().getOrgImage()
 				.getBufferedImage();
+		
+		//选择亮度为前0.1%的像素点
 		for (int i = 0; i < select; i++) {
 			int rgb = orgImage.getRGB(pixels[i].x, pixels[i].y);
 			int r, g, b;
 			r = (rgb >> 16) & 0xff;
 			g = (rgb >> 8) & 0xff;
 			b = (rgb) & 0xff;
-			int h = (int) ((r + g + b) / 3.0);
+			
+			int h = (int) ((r + g + b) / 3.0);	//亮度
+			
+			
+			//获得最大亮度值的像素点
 			if (h > max) {
-				max = 0;
+				max = h;
 				Ar = r;
 				Ag = g;
 				Ab = b;
 			}
+			
 		}
+		
+		Ar = Ar>MAX_A?MAX_A:Ar;
+		Ag = Ag>MAX_A?MAX_A:Ag;
+		Ab = Ab>MAX_A?MAX_A:Ab;
+
 
 		for (int i = 0; i < height; i++) {
 			for (int j = 0; j < width; j++) {
 
+				//获取T(x)
 				double mr = 255, mg = 255, mb = 255;
 				double r, g, b;
 				double min = 255;
@@ -80,6 +106,8 @@ public class DehazeProcess {
 				double t = 1 - 0.95 * min;
 				t = t < 0.1 ? 0.1 : t;
 
+				
+				//最终运算
 				int rgb = orgImage.getRGB(j,i);
 				r = (double) ((rgb >> 16) & 0xff);
 				g = (double) ((rgb >> 8) & 0xff);
@@ -93,9 +121,6 @@ public class DehazeProcess {
                 g = g > 0 ? g : 0;
                 b = b > 0 ? b : 0;
                 
-                r+=30;
-                b+=30;
-                g+=30;
 
                 r = r < 255 ? r : 255;
                 g = g < 255 ? g : 255;

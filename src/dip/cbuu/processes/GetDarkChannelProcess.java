@@ -10,26 +10,27 @@ import dip.cbuu.util.NoiseGenerator;
 
 public class GetDarkChannelProcess {
 
+	// 窗口大小
+	private static final int DEFAULT_SIZE = 11;
+
+	// 获取暗通道处理
 	public static BufferedImage process(BufferedImage bufferedImage) {
 		int width = bufferedImage.getWidth();
 		int height = bufferedImage.getHeight();
-		// int[][] old = MyImage.getData(bufferedImage);
 		int[] data = new int[width * height];
-		int d = 7;
+		int d = DEFAULT_SIZE / 2;
 
+		// 最小滤波
 		for (int i = 0; i < height; i++) {
 			for (int j = 0; j < width; j++) {
 				int mr = 255, mg = 255, mb = 255;
 				int r, g, b;
 				int min = 255;
-				int a = 0;
 				for (int k = i - d; k <= i + d; k++) {
 					for (int l = j - d; l <= j + d; l++) {
-						a++;
 						if (k < 0 || k > height - 1 || l < 0 || l > width - 1) {
 						} else {
 							int rgb = bufferedImage.getRGB(l, k);
-							// DebugLog.log(""+rgb);
 							r = (rgb >> 16) & 0xff;
 							g = (rgb >> 8) & 0xff;
 							b = (rgb) & 0xff;
@@ -42,7 +43,6 @@ public class GetDarkChannelProcess {
 				}
 				min = mr < mg ? mr : mg;
 				min = min < mb ? min : mb;
-				// DebugLog.log(mr+" "+mg+" "+mb+"  "+min);
 				data[i * width + j] = 0xff000000 | (min << 16) | (min << 8)
 						| min;
 

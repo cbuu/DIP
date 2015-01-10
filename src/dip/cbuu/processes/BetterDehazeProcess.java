@@ -12,7 +12,9 @@ public class BetterDehazeProcess {
 	private static int width = 0;
 	private static int height = 0;
 
-	private static final int DEFAULT_SIZE = 113;
+	private static final int DEFAULT_SIZE = 127;
+	private static final int MAX_A = 180;
+	private static final double w = 1.0;
 
 	public static BufferedImage process(BufferedImage darkChannelImage) {
 		width = darkChannelImage.getWidth();
@@ -67,6 +69,10 @@ public class BetterDehazeProcess {
 				Ab = b;
 			}
 		}
+		
+		Ar = Ar>MAX_A?MAX_A:Ar;
+		Ag = Ag>MAX_A?MAX_A:Ag;
+		Ab = Ab>MAX_A?MAX_A:Ab;
 
 		for (int i = 0; i < height; i++) {
 			for (int j = 0; j < width; j++) {
@@ -97,7 +103,7 @@ public class BetterDehazeProcess {
 				min = mr < mg ? mr : mg;
 				min = min < mb ? min : mb;
 
-				double t = 1 - 0.95 * min;
+				double t = 1 - w * min;
 				t = t < 0.1 ? 0.1 : t;
 				T[i * width + j] = t / 255.0;
 			}
@@ -121,10 +127,6 @@ public class BetterDehazeProcess {
 				r = r > 0 ? r : 0;
 				g = g > 0 ? g : 0;
 				b = b > 0 ? b : 0;
-
-				r += 30;
-				b += 30;
-				g += 30;
 
 				r = r < 255 ? r : 255;
 				g = g < 255 ? g : 255;
